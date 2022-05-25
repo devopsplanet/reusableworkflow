@@ -46,4 +46,4 @@ jobs:
       with:
         registry: ${{ env.REGISTRY }}
         username: ${{ env.user}}
-        password: ${{ secrets.GITHUB_TOKEN }} #${{ secrets.PATTOKEN }}
+        password: ${{ secrets.PATTOKEN }}
