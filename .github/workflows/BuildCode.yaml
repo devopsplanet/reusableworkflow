@@ -74,6 +74,6 @@ jobs:
       env:
         IMAGE_TAG: ${{ inputs.env }}-${{ github.sha }}
       run: |
-        docker build -t ${{ env.REGISTRY }}/${{ env.REPO_NAME }}:$IMAGE_TAG .
-        docker push ${{ env.REGISTRY }}/${{ env.REPO_NAME }}:$IMAGE_TAG
-        echo "::set-output name=imageName::${{ env.REGISTRY }}/${{ env.REPO_NAME }}:$IMAGE_TAG"
+        docker build -t ${{ env.REGISTRY }}/${{ env.user }}/${{ env.REPO_NAME }}:$IMAGE_TAG .
+        docker push ${{ env.REGISTRY }}/${{ env.user }}/${{ env.REPO_NAME }}:$IMAGE_TAG
+        echo "::set-output name=imageName::${{ env.REGISTRY }}/${{ env.user }}/${{ env.REPO_NAME }}:$IMAGE_TAG"
