@@ -13,7 +13,7 @@ on:
       servicePort:
         required: true
         type: string
-      imageName:
+      imageTag:
         required: true
         type: string
       cluster:
@@ -63,7 +63,7 @@ jobs:
 
     - name: Change Image name and tag
       run: |
-        sed -i s/imageName/${{ inputs.image }}/g deployment.yaml
+        sed -i s/imageTag/${{ inputs.imageTag }}/g deployment.yaml
         sed -i s/serviceName/${{ inputs.serviceName }}/g deployment.yaml
         sed -i s/servicePort/${{ inputs.servicePort }}/g deployment.yaml
         echo deployment.yaml
