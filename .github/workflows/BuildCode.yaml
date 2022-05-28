@@ -7,6 +7,9 @@ on:
   # Triggers the workflow on call from the source repo.
   workflow_call:
     inputs:
+      org:
+        required: true
+        type: string
       serviceName:
         required: true
         type: string
@@ -19,16 +22,15 @@ on:
       registry:
         required: true
         type: string
+      imageTag:
+        required: true
+        type: string
       event_name:
         required: true
         type: string
       env:
         required: true
         type: string
-    outputs:
-      imageName:
-        description: "Image name with Tag"
-        value: ${{ jobs.build.outputs.imageName }}
     secrets:
       PATTOKEN:
         required: true
@@ -46,9 +48,6 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-20.04
 
-    outputs:
-      imageName: ${{ steps.build-image.outputs.imageName }}
-
     permissions:
       contents: 'read'
       packages: 'write'
@@ -65,15 +64,12 @@ jobs:
       uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
       with:
         registry: ${{ env.REGISTRY }}
-        username: ${{ env.user}}
+        username: ${{ env.user }}
         password: ${{ secrets.PATTOKEN }}
 
     - name: Build, tag, and push image to Github Package
       if:  ${{ inputs.event_name != 'pull_request' }}
       id: build-image
-      env:
-        IMAGE_TAG: ${{ inputs.env }}-${{ github.sha }}
       run: |
-        docker build -t ${{ env.REGISTRY }}/${{ env.user }}/${{ env.REPO_NAME }}:$IMAGE_TAG .
-        docker push ${{ env.REGISTRY }}/${{ env.user }}/${{ env.REPO_NAME }}:$IMAGE_TAG
-        echo "::set-output name=imageName::${{ env.REGISTRY }}/${{ env.user }}/${{ env.REPO_NAME }}:$IMAGE_TAG"
+        docker build -t ${{ env.REGISTRY }}/${{ inputs.org }}/${{ env.REPO_NAME }}:${{ inputs.imageTag }} .
+        docker push ${{ env.REGISTRY }}/${{ inputs.org }}/${{ env.REPO_NAME }}:${{ inputs.imageTag }}
